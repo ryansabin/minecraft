@@ -66,7 +66,33 @@ sudo wget -O /minecraft/plugins/Geyser-Spigot/extensions/MCXboxBroadcastExtensio
 docker restart minecraft
 ```
 
-### 5. Verify Installation
+### 6. Authorize MCXboxBroadcast with Microsoft Account
+
+After installing MCXboxBroadcastExtension and restarting the server, you need to link it to a Microsoft account:
+
+1. **Check server logs** for the authentication code:
+```bash
+docker logs -f minecraft
+```
+
+2. Look for a message showing a **code** (usually 6-8 characters)
+
+3. **Visit the authorization link** in your web browser:
+   - Go to: **https://www.microsoft.com/link** or **https://microsoft.com/devicelogin**
+   - Enter the code exactly as shown in the logs
+   - Sign in with your Microsoft account
+
+4. **Complete authorization** and the server will confirm the connection
+
+**Important recommendations:**
+- Use a dedicated Microsoft account (not your personal account) for better security and to avoid personal notifications
+- Set Xbox privacy settings to allow multiplayer
+- Set activity visibility to "Everyone" so friends can discover the session
+- The account may need Xbox Game Pass or Minecraft ownership to broadcast sessions
+
+Once authorized, your server will be discoverable on Xbox Live, allowing console players to find and join your server from their friends list.
+
+### 7. Verify Installation
 
 Check server logs:
 ```bash
