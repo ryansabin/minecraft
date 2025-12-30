@@ -44,8 +44,7 @@ The server will:
 - Accept the Minecraft EULA automatically
 - Download and install Paper server
 - Install all configured plugins
-- Generate the world with seed `46182117`
-- Start on world name "Season4"
+- Apply environment variables from docker-compose.yml
 
 ### 4. Install Geyser Extensions
 
@@ -114,16 +113,135 @@ Look for messages indicating successful plugin loading and server startup.
 
 ## Server Configuration
 
-The server is configured with the following settings:
+All server settings can be configured via environment variables in `docker-compose.yml`. Here are the available options:
 
-| Setting | Value |
-|---------|-------|
-| World Seed | 46182117 |
-| World Name | Season4 |
-| Memory | 4GB |
-| Difficulty | Normal (2) |
-| Timezone | America/Denver |
-| Game Mode Enforcement | Enabled |
+### Required Settings
+
+- **`EULA`** - Must be set to `"TRUE"` to accept the Minecraft End User License Agreement. Required for the server to start.
+
+### Server Type & Version
+
+- **`TYPE`** - The server type to use. Options: `VANILLA`, `SPIGOT`, `PAPER`, `PURPUR`, `FABRIC`, `FORGE`, `BUKKIT`, `CRAFTBUKKIT`, `SPONGEVANILLA`, `QUILT`, `NEOFORGE`, `LIMBO`, `MAGMA`, `MOHIST`, `CATSERVER`, `MOHIST`, `BUNGEECORD`, `VELOCITY`, `WATERFALL`, `TRAVERTINE`, `GEYSER`, `GEYSERSTANDBY`. Default: `VANILLA`
+- **`VERSION`** - The Minecraft version to use (e.g., `"1.21.11"`, `"LATEST"`). Default: `LATEST`
+
+### Memory & Performance
+
+- **`MEMORY`** - Java heap memory allocation (e.g., `"4G"`, `"6G"`, `"8G"`). Format: number followed by G or M.
+- **`USE_AIKAR_FLAGS`** - Set to `"true"` to use Aikar's optimized JVM flags for better performance. Recommended for Paper servers.
+
+### World Settings
+
+- **`LEVEL`** - The name of the world folder. Default: `world`
+- **`SEED`** - The seed used for world generation. Can be any number or text string.
+- **`LEVEL_TYPE`** - World generation type. Options: `DEFAULT`, `FLAT`, `LARGEBIOMES`, `AMPLIFIED`, `CUSTOMIZED`, `BUFFET`, `DEBUG_ALL_BLOCK_STATES`, `NORMAL`. Default: `DEFAULT`
+- **`GENERATOR_SETTINGS`** - Custom generator settings for world generation (JSON format).
+- **`GENERATE_STRUCTURES`** - Set to `"true"` to generate structures like villages and temples. Default: `true`
+- **`MAX_WORLD_SIZE`** - Maximum world size in blocks. Default: `29999984`
+
+### Gameplay Settings
+
+- **`GAMEMODE`** - Default game mode for new players. Options: `survival`, `creative`, `adventure`, `spectator`. Default: `survival`
+- **`FORCE_GAMEMODE`** - Set to `"true"` to force players to join in the default game mode. Default: `false`
+- **`DIFFICULTY`** - Server difficulty. Options: `peaceful` (0), `easy` (1), `normal` (2), `hard` (3). Default: `easy`
+- **`HARDCORE`** - Set to `"true"` to enable hardcore mode (permanent ban on death). Default: `false`
+- **`PVP`** - Set to `"true"` to enable player versus player combat. Default: `true`
+- **`ALLOW_FLIGHT`** - Set to `"true"` to allow players to fly in survival mode. Default: `false`
+- **`ALLOW_NETHER`** - Set to `"true"` to allow players to travel to the Nether. Default: `true`
+- **`ENABLE_COMMAND_BLOCK`** - Set to `"true"` to enable command blocks. Default: `false`
+
+### Spawn Settings
+
+- **`SPAWN_PROTECTION`** - Radius of protected area around spawn (0-16). Set to 0 to disable. Default: `16`
+- **`SPAWN_MONSTERS`** - Set to `"true"` to allow monster spawning. Default: `true`
+- **`SPAWN_ANIMALS`** - Set to `"true"` to allow animal spawning. Default: `true`
+- **`SPAWN_NPCS`** - Set to `"true"` to allow NPC (villager) spawning. Default: `true`
+
+### Player Settings
+
+- **`MAX_PLAYERS`** - Maximum number of players that can connect simultaneously. Default: `20`
+- **`PLAYER_IDLE_TIMEOUT`** - Minutes before idle players are kicked (0 to disable). Default: `0`
+- **`WHITELIST`** - Set to `"true"` to enable whitelist. Default: `false`
+- **`ENFORCE_WHITELIST`** - Set to `"true"` to kick players not on the whitelist. Default: `false`
+- **`OP_PERMISSION_LEVEL`** - Default permission level for operators (1-4). Default: `4`
+- **`FUNCTION_PERMISSION_LEVEL`** - Permission level for function commands (1-4). Default: `2`
+
+### Network Settings
+
+- **`SERVER_PORT`** - Port the server listens on. Default: `25565`
+- **`SERVER_IP`** - IP address to bind to (leave empty to bind to all). Default: (empty)
+- **`ONLINE_MODE`** - Set to `"true"` to verify players with Mojang authentication. Default: `true`
+- **`NETWORK_COMPRESSION_THRESHOLD`** - Packet compression threshold (-1 to disable). Default: `256`
+- **`MAX_TICK_TIME`** - Maximum milliseconds per tick before server considers itself crashed. Default: `60000`
+- **`PREVENT_PROXY_CONNECTIONS`** - Set to `"true"` to prevent proxy connections. Default: `false`
+
+### Performance Settings
+
+- **`VIEW_DISTANCE`** - Number of chunks sent to players (3-32). Lower values improve performance. Default: `10`
+- **`SIMULATION_DISTANCE`** - Chunks with active entities (5-32). Default: `10`
+- **`MAX_BUILD_HEIGHT`** - Maximum build height. Default: `256`
+- **`RATE_LIMIT`** - Maximum packets per user before kick. Default: `0` (disabled)
+- **`USE_NATIVE_TRANSPORT`** - Set to `"true"` to use native transport for better performance. Default: `true`
+
+### RCON & Remote Access
+
+- **`ENABLE_RCON`** - Set to `"true"` to enable RCON remote console access. Default: `false`
+- **`RCON_PASSWORD`** - Password for RCON access. Required if `ENABLE_RCON` is true.
+- **`RCON_PORT`** - Port for RCON access. Default: `25575`
+
+### Query & Status
+
+- **`ENABLE_QUERY`** - Set to `"true"` to enable GameSpy4 protocol queries. Default: `false`
+- **`QUERY_PORT`** - Port for query protocol. Default: `25565`
+- **`ENABLE_STATUS`** - Set to `"true"` to allow status queries. Default: `true`
+
+### Resource Packs
+
+- **`RESOURCE_PACK`** - URL to a resource pack for players to download.
+- **`RESOURCE_PACK_SHA1`** - SHA-1 hash of the resource pack for validation.
+- **`REQUIRE_RESOURCE_PACK`** - Set to `"true"` to require resource pack acceptance. Default: `false`
+- **`RESOURCE_PACK_PROMPT`** - Message displayed when prompting for resource pack.
+
+### Server Properties
+
+- **`MOTD`** - Message of the Day displayed in server list. Default: `A Minecraft Server`
+- **`OVERRIDE_SERVER_PROPERTIES`** - Set to `"true"` to allow environment variables to override server.properties. Default: `false`
+- **`SERVER_NAME`** - Name of the server as it appears in server list.
+
+### Logging & Debugging
+
+- **`LOG_IPS`** - Set to `"true"` to log IP addresses of connecting players. Default: `true`
+- **`DEBUG`** - Set to `"true"` to enable debug logging. Default: `false`
+- **`SNOOPER_ENABLED`** - Set to `"true"` to send anonymized data to Mojang. Default: `true`
+
+### Advanced Settings
+
+- **`SYNC_CHUNK_WRITES`** - Set to `"true"` to synchronously write chunks to disk. Default: `true`
+- **`ENTITY_BROADCAST_RANGE_PERCENTAGE`** - Percentage of default entity tracking range. Default: `100`
+- **`BROADCAST_CONSOLE_TO_OPS`** - Set to `"true"` to send console outputs to all operators. Default: `true`
+- **`BROADCAST_RCON_TO_OPS`** - Set to `"true"` to send RCON outputs to all operators. Default: `true`
+- **`ENFORCE_SECURE_PROFILE`** - Set to `"true"` to enforce secure profiles. Default: `true`
+- **`ENABLE_JMX_MONITORING`** - Set to `"true"` to enable JMX monitoring. Default: `false`
+- **`BUG_REPORT_LINK`** - URL for the "Report Bug" button in server list.
+
+### Plugins & Mods
+
+- **`PLUGINS`** - Multi-line list of plugin URLs to download automatically. One URL per line.
+- **`MODS`** - Multi-line list of mod URLs to download automatically. One URL per line.
+- **`REMOVE_OLD_MODS`** - Set to `"true"` to remove old mods before downloading new ones. Default: `false`
+- **`REMOVE_OLD_MODS_DEPTH`** - Depth to search for old mods (1-3). Default: `1`
+
+### System Settings
+
+- **`TZ`** - Timezone for the server (e.g., `America/Denver`, `Europe/London`). Default: `UTC`
+- **`JVM_OPTS`** - Additional JVM options to pass to the server.
+- **`JVM_XX_OPTS`** - Additional JVM XX options (e.g., `-XX:+UseG1GC`).
+
+### Backup & Maintenance
+
+- **`ENABLE_AUTOPAUSE`** - Set to `"true"` to automatically pause server when no players. Default: `false`
+- **`AUTOPAUSE_TIMEOUT_EST`** - Estimated seconds before autopause triggers. Default: `3600`
+- **`AUTOPAUSE_TIMEOUT_KN`** - Known seconds before autopause triggers. Default: `120`
+- **`AUTOPAUSE_PERIOD`** - Seconds between autopause checks. Default: `10`
 
 ## Useful Commands
 
