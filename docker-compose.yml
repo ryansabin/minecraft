@@ -25,7 +25,7 @@ services:
       SNOOPER_ENABLED: "false"
       GEYSER_BEDROCK_COMPRESSION_LEVEL: "3"
       # Performance optimizations
-      VIEW_DISTANCE: "8"
+      VIEW_DISTANCE: "32"
       SIMULATION_DISTANCE: "6"
       SYNC_CHUNK_WRITES: "false"
       MAX_TICK_TIME: "120000"
@@ -37,6 +37,7 @@ services:
         https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot
         https://download.geysermc.org/v2/projects/hurricane/versions/latest/builds/latest/downloads/spigot
         https://hangarcdn.papermc.io/plugins/ViaVersion/ViaVersion/versions/5.7.0/PAPER/ViaVersion-5.7.0.jar
+        https://cdn.modrinth.com/data/KaptPQgq/versions/5rEJHG6D/chunky-paper-1.4.28.jar
     volumes:
       - "/minecraft:/data"
     restart: unless-stopped
