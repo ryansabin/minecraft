@@ -27,15 +27,8 @@ sudo mkdir -p /minecraft && sudo chmod 755 /minecraft
 docker-compose up -d
 ```
 
-### 3. Enable Auto-Update System
-Run this one-time command to set up automatic config.yml and extension updates:
-```bash
-docker exec minecraft bash -c "curl -fsSL https://raw.githubusercontent.com/ryansabin/minecraft/main/init-auto-update.sh | bash"
-```
-
-This sets up a cron job inside the container that checks GitHub every 5 minutes for updates.
-
-**Note**: If you restart the container, you'll need to run this command again to restart the cron daemon.
+### 3. Auto-Update System
+The auto-update system is automatically configured when the container starts. No manual setup required!
 
 ### 4. Authorize MCXboxBroadcast
 1. Check logs for auth code: `docker logs -f minecraft`
@@ -96,16 +89,12 @@ docker exec -i minecraft rcon-cli # Execute commands
 
 The server includes an automatic update system that runs **inside the Docker container**. It checks for config.yml and Geyser extension changes from GitHub every 5 minutes.
 
-### Setup
-After starting the container, run once:
-```bash
-docker exec minecraft bash -c "curl -fsSL https://raw.githubusercontent.com/ryansabin/minecraft/main/init-auto-update.sh | bash"
-```
-
 ### How It Works
-- **Cron job**: Runs every 5 minutes inside the container
-- **Downloads from GitHub**: Pulls scripts directly from the repository
+- **Automatic setup**: The `init-auto-update.sh` script runs automatically when the container starts
+- **Cron job**: Runs every 5 minutes inside the container to check for updates
+- **Downloads from GitHub**: Pulls scripts and configs directly from the repository
 - **No local files needed**: Everything is fetched from GitHub
+- **Auto-reinitializes**: When Portainer redeploys the container (after GitHub changes), the init script runs again automatically
 
 ### Features
 - Checks GitHub for updates every 5 minutes
