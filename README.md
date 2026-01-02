@@ -17,6 +17,18 @@ Paper server with cross-play support for Bedrock Edition players.
 
 ## Setup
 
+### 0. Fork and Customize
+
+**Important**: Before deploying, fork this repository and update the following personal information in `docker-compose.yml`:
+
+- **`OPS`**: Replace `"Kleptonite32"` with your Minecraft username (gives you operator/admin privileges)
+- **`SEED`**: Replace `"46182117"` with your desired world seed (or remove for random)
+- **`LEVEL`**: Replace `"Season4"` with your world name
+- **`TZ`**: Replace `"America/Denver"` with your timezone (e.g., `"America/New_York"`, `"Europe/London"`)
+- **GitHub repo URL**: Update the `init-auto-update.sh` download URL in the `command` section (line 44) to point to your forked repository
+
+Also update the GitHub repository URL in `init-auto-update.sh` and `update-geyser.sh` if you're using the auto-update system.
+
 ### 1. Create Directory
 ```bash
 sudo mkdir -p /minecraft && sudo chmod 755 /minecraft
@@ -27,10 +39,10 @@ sudo mkdir -p /minecraft && sudo chmod 755 /minecraft
 docker-compose up -d
 ```
 
-### 3. Auto-Update System
+### 4. Auto-Update System
 The auto-update system is automatically configured when the container starts. No manual setup required!
 
-### 4. Authorize MCXboxBroadcast
+### 5. Authorize MCXboxBroadcast
 1. Check logs for auth code: `docker logs -f minecraft`
 2. Visit https://microsoft.com/link and enter the code
 3. Sign in with a Microsoft account (use a dedicated account, not personal)
