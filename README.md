@@ -27,13 +27,17 @@ sudo mkdir -p /minecraft && sudo chmod 755 /minecraft
 docker-compose up -d
 ```
 
-The container will automatically:
-- Install all plugins
-- Download and configure Geyser extensions
-- Set up the auto-update system (checks GitHub every 5 minutes)
-- Apply the optimized config.yml
+### 3. Enable Auto-Update System
+Run this one-time command to set up automatic config.yml and extension updates:
+```bash
+docker exec minecraft bash -c "curl -fsSL https://raw.githubusercontent.com/ryansabin/minecraft/main/init-auto-update.sh | bash"
+```
 
-### 3. Authorize MCXboxBroadcast
+This sets up a cron job inside the container that checks GitHub every 5 minutes for updates.
+
+**Note**: If you restart the container, you'll need to run this command again to restart the cron daemon.
+
+### 4. Authorize MCXboxBroadcast
 1. Check logs for auth code: `docker logs -f minecraft`
 2. Visit https://microsoft.com/link and enter the code
 3. Sign in with a Microsoft account (use a dedicated account, not personal)
@@ -92,10 +96,16 @@ docker exec -i minecraft rcon-cli # Execute commands
 
 The server includes an automatic update system that runs **inside the Docker container**. It checks for config.yml and Geyser extension changes from GitHub every 5 minutes.
 
+### Setup
+After starting the container, run once:
+```bash
+docker exec minecraft bash -c "curl -fsSL https://raw.githubusercontent.com/ryansabin/minecraft/main/init-auto-update.sh | bash"
+```
+
 ### How It Works
-- **Automatic setup**: Configured on container startup via `INIT_SCRIPT` in docker-compose.yml
 - **Cron job**: Runs every 5 minutes inside the container
-- **No manual installation needed**: Everything is handled by Docker
+- **Downloads from GitHub**: Pulls scripts directly from the repository
+- **No local files needed**: Everything is fetched from GitHub
 
 ### Features
 - Checks GitHub for updates every 5 minutes

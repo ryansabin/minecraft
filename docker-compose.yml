@@ -38,8 +38,6 @@ services:
         https://download.geysermc.org/v2/projects/hurricane/versions/latest/builds/latest/downloads/spigot
         https://hangarcdn.papermc.io/plugins/ViaVersion/ViaVersion/versions/5.7.0/PAPER/ViaVersion-5.7.0.jar
         https://hangarcdn.papermc.io/plugins/pop4959/Chunky/versions/1.4.40/PAPER/Chunky-Bukkit-1.4.40.jar
-      # Auto-update system for config.yml and extensions
-      INIT_SCRIPT: https://raw.githubusercontent.com/ryansabin/minecraft/main/init-auto-update.sh
     volumes:
       - "/minecraft:/data"
     restart: unless-stopped
