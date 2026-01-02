@@ -50,17 +50,31 @@ docker restart minecraft
 
 ## Configuration
 
-Configure via environment variables in `docker-compose.yml`. Key settings:
+This server is optimized for best gameplay performance with minimal CPU overhead. Key settings in `docker-compose.yml`:
 
-- `MEMORY` - RAM allocation (e.g., `"4G"`)
-- `VERSION` - Minecraft version
-- `GAMEMODE` - survival, creative, adventure, spectator
-- `DIFFICULTY` - peaceful, easy, normal, hard
-- `MAX_PLAYERS` - Player limit
-- `MOTD` - Server description
-- `NETWORK_COMPRESSION_THRESHOLD` - Set to `512` if you see packet errors
-- `GEYSER_BEDROCK_COMPRESSION_LEVEL` - Set to `6` for better Bedrock/PS performance
-- `SNOOPER_ENABLED` - Set to `"false"` to disable telemetry
+### Basic Settings
+- `MEMORY: "4G"` - RAM allocation
+- `VERSION: "1.21.11"` - Minecraft version
+- `USE_AIKAR_FLAGS: "true"` - Performance-optimized JVM flags
+
+### Performance Optimizations
+- `NETWORK_COMPRESSION_THRESHOLD: "-1"` - Compression disabled (no CPU overhead, uses more bandwidth)
+- `GEYSER_BEDROCK_COMPRESSION_LEVEL: "3"` - Low compression for Bedrock (less CPU, more bandwidth)
+- `VIEW_DISTANCE: "8"` - Reduced from default 10 (significant CPU/memory savings)
+- `SIMULATION_DISTANCE: "6"` - Reduced from default 10 (major CPU reduction for entities/mobs)
+- `SYNC_CHUNK_WRITES: "false"` - Async chunk writing (reduces I/O lag spikes)
+- `MAX_TICK_TIME: "120000"` - Prevents watchdog crashes during lag spikes
+- `SPAWN_PROTECTION: "0"` - Disables spawn protection checks (minor CPU savings)
+- `ENABLE_ROLLING_LOGS: "false"` - Reduces log I/O overhead
+- `SNOOPER_ENABLED: "false"` - Disables telemetry (better performance and privacy)
+
+### Geyser Configuration (config.yml)
+The optimized Geyser config includes:
+- **Timeouts increased to 120s** - Better stability for console players
+- **Skin caching enabled (7 days)** - Reduces network calls
+- **Compression level: 3** - Low CPU overhead
+- **MTU: 1492** - Maximum MTU for less packet fragmentation
+- **Java compression disabled** - No Java→Geyser compression overhead
 
 Full config reference: https://github.com/itzg/docker-minecraft-server
 
