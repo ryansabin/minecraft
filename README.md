@@ -430,6 +430,75 @@ The MCXboxBroadcastExtension you installed helps PlayStation players find your s
 
 **For detailed PlayStation troubleshooting**, see [PLAYSTATION-FIX.md](PLAYSTATION-FIX.md)
 
+### MCXboxBroadcast "Failure to create connection" warnings
+If you see warnings like `[mcxboxbroadcast] Failure to create connection to the client after 15s`:
+
+**What this means:**
+- MCXboxBroadcast helps console players discover your server in their Friends list
+- The WebRTC/ICE connection is failing, which prevents automatic server discovery
+- **This doesn't break gameplay** - players can still connect by entering the server IP directly
+
+**Common causes:**
+1. **Symmetric NAT / Restrictive Firewall**: Your network's NAT type blocks the WebRTC STUN connections
+2. **No Port Forwarding**: Ports aren't properly forwarded for STUN protocol
+3. **ISP CGNAT**: Your ISP uses Carrier-Grade NAT, making direct connections impossible
+4. **VPN/Proxy**: Network traffic is being routed through restrictive gateways
+
+**Solutions:**
+
+**Option 1: Use Direct IP Connection (Simplest)**
+Console players can manually add your server:
+1. Open Minecraft Bedrock
+2. Go to Servers → Add Server
+3. Enter your server IP and port 19132
+4. Click Save and join directly
+
+**Option 2: Configure Network for WebRTC**
+For advanced users who want Friends list discovery:
+
+1. **Check NAT Type**:
+```bash
+# On your server, check if STUN is working
+docker logs minecraft | grep -i stun
+```
+
+2. **Port Forwarding for STUN** (UDP ports needed):
+   - Forward UDP ports 19132-19133 on your router
+   - Forward UDP ports 49152-65535 (ephemeral ports for WebRTC)
+
+3. **Disable IPv6** (if causing issues):
+```yaml
+# Add to docker-compose.yml
+sysctls:
+  - net.ipv6.conf.all.disable_ipv6=1
+```
+
+4. **Use a VPS/Cloud Server**: If your home network has CGNAT or symmetric NAT, host on a cloud provider (AWS, DigitalOcean, etc.) with a public IP
+
+**Option 3: Suppress the Warning**
+If you don't need Friends list discovery and want to silence the warnings:
+
+Edit `/minecraft/plugins/Geyser-Spigot/extensions/MCXboxBroadcastExtension/config.yml`:
+```yaml
+# Disable session broadcasting
+enabled: false
+```
+Restart server: `docker restart minecraft`
+
+**Option 4: Update MCXboxBroadcast**
+Sometimes newer versions have better NAT traversal:
+```bash
+# Download latest version
+sudo wget -O /minecraft/plugins/Geyser-Spigot/extensions/MCXboxBroadcastExtension.jar https://github.com/MCXboxBroadcast/Broadcaster/releases/latest/download/MCXboxBroadcastExtension.jar
+docker restart minecraft
+```
+
+**Important Notes:**
+- The STUN errors are warnings, not critical errors
+- Java Edition players are completely unaffected
+- Bedrock players can still connect via direct IP
+- Friends list discovery is a convenience feature, not a requirement
+
 ### Extensions not loading
 - Ensure extensions are in the correct directory: `/minecraft/plugins/Geyser-Spigot/extensions/`
 - Verify file permissions allow the container to read the files
