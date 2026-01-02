@@ -106,18 +106,6 @@ SNOOPER_ENABLED: "false"
 ```
 PlayStation may need MTU set to 1473 in network settings. See [PLAYSTATION-FIX.md](PLAYSTATION-FIX.md) for details.
 
-### MCXboxBroadcast connection warnings
-These warnings don't break gameplay. Players can still connect via direct IP. To disable warnings:
-```bash
-# Edit config to disable broadcasting
-sudo nano /minecraft/plugins/Geyser-Spigot/extensions/MCXboxBroadcastExtension/config.yml
-# Set enabled: false
-docker restart minecraft
-```
-
-### Performance issues
-Increase `MEMORY` in docker-compose.yml or reduce `VIEW_DISTANCE`.
-
 ## Updating
 
 ```bash
