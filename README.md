@@ -93,12 +93,6 @@ docker exec -i minecraft rcon-cli # Execute commands
 ### Server won't start
 Check logs: `docker logs minecraft`. Verify ports 25565 and 19132 are available.
 
-### Packet compression errors
-Add to `docker-compose.yml`:
-```yaml
-NETWORK_COMPRESSION_THRESHOLD: "512"
-```
-
 ### Bedrock players can't connect
 - Open port 19132/UDP in firewall
 - Check Geyser loaded in logs
