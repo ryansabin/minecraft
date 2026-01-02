@@ -170,7 +170,7 @@ All server settings can be configured via environment variables in `docker-compo
 - **`SERVER_PORT`** - Port the server listens on. Default: `25565`
 - **`SERVER_IP`** - IP address to bind to (leave empty to bind to all). Default: (empty)
 - **`ONLINE_MODE`** - Set to `"true"` to verify players with Mojang authentication. Default: `true`
-- **`NETWORK_COMPRESSION_THRESHOLD`** - Packet compression threshold (-1 to disable). Default: `256`
+- **`NETWORK_COMPRESSION_THRESHOLD`** - Packet compression threshold in bytes. Set to `512` for better stability, or `-1` to disable compression. Lower values = more compression but higher CPU usage. Higher values = less compression but better for unstable connections. Default: `256`
 - **`MAX_TICK_TIME`** - Maximum milliseconds per tick before server considers itself crashed. Default: `60000`
 - **`PREVENT_PROXY_CONNECTIONS`** - Set to `"true"` to prevent proxy connections. Default: `false`
 
@@ -211,7 +211,8 @@ All server settings can be configured via environment variables in `docker-compo
 
 - **`LOG_IPS`** - Set to `"true"` to log IP addresses of connecting players. Default: `true`
 - **`DEBUG`** - Set to `"true"` to enable debug logging. Default: `false`
-- **`SNOOPER_ENABLED`** - Set to `"true"` to send anonymized data to Mojang. Default: `true`
+- **`SNOOPER_ENABLED`** - Set to `"false"` to disable sending anonymized data to Mojang. Recommended to disable for better performance and privacy. Default: `true`
+- **`GEYSER_BEDROCK_COMPRESSION_LEVEL`** - Compression level for Bedrock Edition packets (1-9). Higher = more compression but more CPU. Set to `6` for balanced performance with Bedrock/PlayStation players. Default: `7`
 
 ### Advanced Settings
 
@@ -309,10 +310,125 @@ sudo tar -czf minecraft-backup-$(date +%Y%m%d).tar.gz /minecraft
 - Verify Docker has sufficient memory allocated
 - Check logs: `docker logs minecraft`
 
+### Packet Compression Errors ("Badly compressed packet")
+If you see errors like "Badly compressed packet - actual length does not match declared size":
+
+**Solution 1: Adjust Network Compression Threshold**
+
+Add this to your `docker-compose.yml` under environment variables:
+```yaml
+NETWORK_COMPRESSION_THRESHOLD: "512"
+```
+
+**Solution 2: Disable Compression (for testing)**
+
+Add this to environment variables:
+```yaml
+NETWORK_COMPRESSION_THRESHOLD: "-1"
+```
+
+**Solution 3: Create server.properties override**
+
+After first server start, edit `/minecraft/server.properties` and add:
+```properties
+network-compression-threshold=512
+```
+Or set to `-1` to disable compression entirely.
+
+Then restart: `docker restart minecraft`
+
+**Solution 4: Check Paper configuration**
+
+Edit `/minecraft/config/paper-global.yml` and adjust:
+```yaml
+packet-limiter:
+  all-packets:
+    max-packet-rate: 500.0
+  kick-message: '&cSent too many packets'
+```
+
+**Solution 5: Network/Client fixes**
+- Disable any VPN or proxy while playing
+- Reduce client render distance (8-12 chunks)
+- Allocate more RAM to Minecraft client (3-4GB recommended)
+- Try a wired connection instead of WiFi
+- Update network drivers
+
 ### Bedrock players can't connect
 - Ensure port 19132/udp is open in your firewall
 - Verify Geyser plugin loaded successfully in server logs
 - Check Geyser configuration in `/minecraft/plugins/Geyser-Spigot/config.yml`
+
+### PlayStation players getting "Connection reset" errors
+PlayStation has stricter connectivity requirements. Try these solutions:
+
+**Solution 1: Configure Geyser for PlayStation compatibility**
+
+Edit `/minecraft/plugins/Geyser-Spigot/config.yml`:
+```yaml
+bedrock:
+  port: 19132
+  # Use 0.0.0.0 to bind to all interfaces
+  address: 0.0.0.0
+  
+# Enable Xbox Live authentication (required for PlayStation)
+auth-type: floodgate
+
+# Increase timeouts for PlayStation's slower authentication
+connection-timeout: 30
+
+# Enable these for better PlayStation compatibility
+use-adapters: true
+enable-proxy-connections: true
+```
+
+**Solution 2: Ensure Floodgate is properly configured**
+
+Edit `/minecraft/plugins/floodgate/config.yml`:
+```yaml
+# PlayStation players need this enabled
+player-link:
+  enabled: true
+  type: global
+
+# Increase timeout for PlayStation authentication
+disconnect-time: 30
+```
+
+**Solution 3: Port forwarding for PlayStation**
+
+PlayStation requires proper UDP port forwarding:
+1. Forward port 19132 UDP (not just TCP) on your router
+2. Set PlayStation to use Static IP or DMZ
+3. Set PlayStation DNS to 8.8.8.8 and 8.8.4.4 (Google DNS)
+4. Test port forwarding at https://www.yougetsignal.com/tools/open-ports/
+
+**Solution 4: PlayStation Network Settings**
+On the PlayStation:
+1. Go to Settings → Network → Connection Status → Test Internet Connection
+2. Set MTU to 1473 (lower than default 1500)
+3. Restart PlayStation after changing MTU
+
+**Solution 5: Server-side network optimizations**
+
+Add these to your `docker-compose.yml` environment:
+```yaml
+# Better handling of UDP packets for PlayStation
+GEYSER_BEDROCK_COMPRESSION_LEVEL: "6"
+# Increase packet buffer
+SNOOPER_ENABLED: "false"
+```
+
+**Solution 6: Use MCXboxBroadcast for easier connection**
+
+The MCXboxBroadcastExtension you installed helps PlayStation players find your server:
+1. Ensure it's properly loaded (check logs)
+2. PlayStation players should see the server in their "Friends" tab
+3. May need to add the server owner's Microsoft account as a friend first
+
+**Quick Test**: Have the PlayStation player try connecting to the server's **internal IP address** first (e.g., 192.168.1.x:19132) to rule out external network issues.
+
+**For detailed PlayStation troubleshooting**, see [PLAYSTATION-FIX.md](PLAYSTATION-FIX.md)
 
 ### Extensions not loading
 - Ensure extensions are in the correct directory: `/minecraft/plugins/Geyser-Spigot/extensions/`
