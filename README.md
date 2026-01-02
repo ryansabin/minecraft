@@ -98,14 +98,6 @@ Check logs: `docker logs minecraft`. Verify ports 25565 and 19132 are available.
 - Check Geyser loaded in logs
 - Try direct IP connection (not Friends list)
 
-### PlayStation connection issues
-Set in `docker-compose.yml`:
-```yaml
-GEYSER_BEDROCK_COMPRESSION_LEVEL: "6"
-SNOOPER_ENABLED: "false"
-```
-PlayStation may need MTU set to 1473 in network settings. See [PLAYSTATION-FIX.md](PLAYSTATION-FIX.md) for details.
-
 ## Updating
 
 ```bash
