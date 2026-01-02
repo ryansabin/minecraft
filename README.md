@@ -6,7 +6,8 @@ Paper server with cross-play support for Bedrock Edition players.
 
 - Paper 1.21.11 with 4GB RAM
 - Cross-play support (Java + Bedrock)
-- Plugins: Geyser, Floodgate, Hurricane, ViaVersion
+- Distant Horizons support (VIEW_DISTANCE: 32)
+- Plugins: Geyser, Floodgate, Hurricane, ViaVersion, Chunky
 
 ## Prerequisites
 
@@ -61,10 +62,14 @@ This server is optimized for best gameplay performance with minimal CPU overhead
 - `VERSION: "1.21.11"` - Minecraft version
 - `USE_AIKAR_FLAGS: "true"` - Performance-optimized JVM flags
 
+### Distant Horizons Support
+- `VIEW_DISTANCE: "32"` - Extended render distance for Distant Horizons client mod
+- **Chunky plugin** - Pre-generates chunks for faster LOD loading
+- Players need to install Distant Horizons mod on their client: https://modrinth.com/mod/distanthorizons
+
 ### Performance Optimizations
 - `NETWORK_COMPRESSION_THRESHOLD: "-1"` - Compression disabled (no CPU overhead, uses more bandwidth)
 - `GEYSER_BEDROCK_COMPRESSION_LEVEL: "3"` - Low compression for Bedrock (less CPU, more bandwidth)
-- `VIEW_DISTANCE: "8"` - Reduced from default 10 (significant CPU/memory savings)
 - `SIMULATION_DISTANCE: "6"` - Reduced from default 10 (major CPU reduction for entities/mobs)
 - `SYNC_CHUNK_WRITES: "false"` - Async chunk writing (reduces I/O lag spikes)
 - `MAX_TICK_TIME: "120000"` - Prevents watchdog crashes during lag spikes
