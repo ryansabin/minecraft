@@ -88,6 +88,28 @@ docker logs -f minecraft          # View logs
 docker exec -i minecraft rcon-cli # Execute commands
 ```
 
+## Auto-Update Config.yml
+
+The server includes an automatic update system that checks for config.yml changes from GitHub every 5 minutes.
+
+### Setup (One-time)
+```bash
+./install-auto-update.sh
+```
+
+### Features
+- Checks GitHub for config.yml updates every 5 minutes
+- Automatically backs up old config before updating
+- Restarts server only when changes are detected
+- Logs all updates to `/var/log/minecraft-config-update.log`
+
+### Manual Commands
+```bash
+./update-config.sh                              # Manually check for updates
+tail -f /var/log/minecraft-config-update.log    # View update logs
+crontab -e                                       # Edit/remove auto-update schedule
+```
+
 ## Troubleshooting
 
 ### Server won't start
