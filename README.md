@@ -27,22 +27,13 @@ sudo mkdir -p /minecraft && sudo chmod 755 /minecraft
 docker-compose up -d
 ```
 
-### 3. Setup Auto-Update System
-Wait 2-3 minutes, then install the auto-update system to manage config.yml and extensions:
-```bash
-git clone https://github.com/ryansabin/minecraft.git ~/minecraft-config
-cd ~/minecraft-config
-./install-auto-update.sh
-./update-config.sh  # Run once to install everything immediately
-```
+The container will automatically:
+- Install all plugins
+- Download and configure Geyser extensions
+- Set up the auto-update system (checks GitHub every 5 minutes)
+- Apply the optimized config.yml
 
-This will automatically install:
-- Geyser config.yml
-- EmoteOffhand extension
-- ThirdPartyCosmetics extension
-- MCXboxBroadcast extension
-
-### 4. Authorize MCXboxBroadcast
+### 3. Authorize MCXboxBroadcast
 1. Check logs for auth code: `docker logs -f minecraft`
 2. Visit https://microsoft.com/link and enter the code
 3. Sign in with a Microsoft account (use a dedicated account, not personal)
@@ -99,33 +90,33 @@ docker exec -i minecraft rcon-cli # Execute commands
 
 ## Auto-Update System
 
-The server includes an automatic update system that checks for config.yml and Geyser extension changes from GitHub every 5 minutes.
+The server includes an automatic update system that runs **inside the Docker container**. It checks for config.yml and Geyser extension changes from GitHub every 5 minutes.
 
-### Setup (One-time)
-```bash
-./install-auto-update.sh
-```
+### How It Works
+- **Automatic setup**: Configured on container startup via `INIT_SCRIPT` in docker-compose.yml
+- **Cron job**: Runs every 5 minutes inside the container
+- **No manual installation needed**: Everything is handled by Docker
 
 ### Features
 - Checks GitHub for updates every 5 minutes
 - Updates `config.yml` automatically
 - Updates Geyser extensions from `geyser-extensions.txt`
 - Automatically backs up old files before updating
-- Restarts server only when changes are detected
-- Logs all updates to `/var/log/minecraft-config-update.log`
+- Logs all updates to `/data/logs/auto-update.log`
 
 ### Managing Extensions
-Edit `geyser-extensions.txt` to add/remove extensions:
+Edit `geyser-extensions.txt` in the GitHub repo to add/remove extensions:
 ```
 # Format: URL|filename
 https://download.geysermc.org/v2/projects/emoteoffhand/versions/latest/builds/latest/downloads/emoteoffhand|EmoteOffhand.jar
 ```
 
-### Manual Commands
+Push changes to GitHub and the container will auto-update within 5 minutes.
+
+### Viewing Logs
 ```bash
-./update-config.sh                              # Manually check for updates
-tail -f /var/log/minecraft-config-update.log    # View update logs
-crontab -e                                       # Edit/remove auto-update schedule
+docker exec minecraft tail -f /data/logs/auto-update.log   # View update logs
+docker exec minecraft cat /usr/local/bin/update-geyser.sh  # View update script
 ```
 
 ## Troubleshooting
