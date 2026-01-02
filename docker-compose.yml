@@ -21,6 +21,7 @@ services:
       SEED: "46182117"
       LEVEL: "Season4"
       OVERRIDE_SERVER_PROPERTIES: "true"
+      NETWORK_COMPRESSION_THRESHOLD: "512"
       PLUGINS: |-
         https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot
         https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot
