@@ -26,16 +26,20 @@ sudo mkdir -p /minecraft && sudo chmod 755 /minecraft
 docker-compose up -d
 ```
 
-### 3. Install Geyser Extensions
-Wait 2-3 minutes, then:
+### 3. Setup Auto-Update System
+Wait 2-3 minutes, then install the auto-update system to manage config.yml and extensions:
 ```bash
-sudo mkdir -p /minecraft/plugins/Geyser-Spigot/extensions
-sudo wget -O /minecraft/plugins/Geyser-Spigot/extensions/EmoteOffhand.jar https://download.geysermc.org/v2/projects/emoteoffhand/versions/latest/builds/latest/downloads/emoteoffhand
-sudo wget -O /minecraft/plugins/Geyser-Spigot/extensions/ThirdPartyCosmetics.jar https://download.geysermc.org/v2/projects/thirdpartycosmetics/versions/latest/builds/latest/downloads/thirdpartycosmetics
-sudo wget -O /minecraft/plugins/Geyser-Spigot/extensions/MCXboxBroadcastExtension.jar https://github.com/MCXboxBroadcast/Broadcaster/releases/download/118/MCXboxBroadcastExtension.jar
-sudo wget -O /minecraft/plugins/Geyser-Spigot/config.yml https://raw.githubusercontent.com/ryansabin/minecraft/main/config.yml
-docker restart minecraft
+git clone https://github.com/ryansabin/minecraft.git ~/minecraft-config
+cd ~/minecraft-config
+./install-auto-update.sh
+./update-config.sh  # Run once to install everything immediately
 ```
+
+This will automatically install:
+- Geyser config.yml
+- EmoteOffhand extension
+- ThirdPartyCosmetics extension
+- MCXboxBroadcast extension
 
 ### 4. Authorize MCXboxBroadcast
 1. Check logs for auth code: `docker logs -f minecraft`
@@ -88,9 +92,9 @@ docker logs -f minecraft          # View logs
 docker exec -i minecraft rcon-cli # Execute commands
 ```
 
-## Auto-Update Config.yml
+## Auto-Update System
 
-The server includes an automatic update system that checks for config.yml changes from GitHub every 5 minutes.
+The server includes an automatic update system that checks for config.yml and Geyser extension changes from GitHub every 5 minutes.
 
 ### Setup (One-time)
 ```bash
@@ -98,10 +102,19 @@ The server includes an automatic update system that checks for config.yml change
 ```
 
 ### Features
-- Checks GitHub for config.yml updates every 5 minutes
-- Automatically backs up old config before updating
+- Checks GitHub for updates every 5 minutes
+- Updates `config.yml` automatically
+- Updates Geyser extensions from `geyser-extensions.txt`
+- Automatically backs up old files before updating
 - Restarts server only when changes are detected
 - Logs all updates to `/var/log/minecraft-config-update.log`
+
+### Managing Extensions
+Edit `geyser-extensions.txt` to add/remove extensions:
+```
+# Format: URL|filename
+https://download.geysermc.org/v2/projects/emoteoffhand/versions/latest/builds/latest/downloads/emoteoffhand|EmoteOffhand.jar
+```
 
 ### Manual Commands
 ```bash

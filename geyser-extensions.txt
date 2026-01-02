@@ -1,0 +1,7 @@
+# Geyser Extensions
+# One URL per line. Lines starting with # are ignored.
+# Format: URL|filename
+
+https://download.geysermc.org/v2/projects/emoteoffhand/versions/latest/builds/latest/downloads/emoteoffhand|EmoteOffhand.jar
+https://download.geysermc.org/v2/projects/thirdpartycosmetics/versions/latest/builds/latest/downloads/thirdpartycosmetics|ThirdPartyCosmetics.jar
+https://github.com/MCXboxBroadcast/Broadcaster/releases/download/118/MCXboxBroadcastExtension.jar|MCXboxBroadcastExtension.jar
