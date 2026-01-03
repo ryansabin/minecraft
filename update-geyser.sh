@@ -49,6 +49,10 @@ echo "[$(date)] Checking Geyser extensions..."
 if ! curl -fsSL "$EXTENSIONS_LIST_URL" -o "$TEMP_EXTENSIONS_LIST"; then
     echo "[$(date)] WARNING: Failed to download extensions list from GitHub"
 else
+    # Track which extensions are in the list
+    TEMP_EXTENSIONS_SET="/tmp/geyser-extensions-set.txt"
+    > "$TEMP_EXTENSIONS_SET"
+    
     # Parse and download each extension
     while IFS='|' read -r url filename || [ -n "$url" ]; do
         # Skip empty lines and comments
@@ -57,6 +61,9 @@ else
         # Trim whitespace
         url=$(echo "$url" | xargs)
         filename=$(echo "$filename" | xargs)
+        
+        # Track this extension as being in the list
+        echo "$filename" >> "$TEMP_EXTENSIONS_SET"
 
         extension_path="$EXTENSIONS_DIR/$filename"
         temp_extension="/tmp/$filename"
@@ -83,6 +90,35 @@ else
             rm -f "$temp_extension"
         fi
     done < "$TEMP_EXTENSIONS_LIST"
+    
+    # ============================================
+    # Remove extensions not in the list
+    # ============================================
+    echo "[$(date)] Checking for extensions to remove..."
+    
+    # Find all .jar files in extensions directory
+    while IFS= read -r -d '' extension_file; do
+        filename=$(basename "$extension_file")
+        
+        # Check if this extension is in the list
+        if ! grep -Fxq "$filename" "$TEMP_EXTENSIONS_SET"; then
+            echo "[$(date)] Removing extension not in list: $filename"
+            rm -f "$extension_file"
+            NEEDS_RESTART=true
+            
+            # Remove associated folder if it exists
+            # Pattern: remove .jar, convert to lowercase, remove "Extension" suffix
+            folder_name=$(echo "$filename" | sed 's/\.jar$//' | tr '[:upper:]' '[:lower:]' | sed 's/extension$//')
+            folder_path="$EXTENSIONS_DIR/$folder_name"
+            
+            if [ -d "$folder_path" ]; then
+                echo "[$(date)] Removing extension folder: $folder_name"
+                rm -rf "$folder_path"
+            fi
+        fi
+    done < <(find "$EXTENSIONS_DIR" -maxdepth 1 -type f -name "*.jar" -print0)
+    
+    rm -f "$TEMP_EXTENSIONS_SET"
 fi
 
 # ============================================
