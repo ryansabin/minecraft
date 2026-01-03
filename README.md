@@ -17,7 +17,7 @@ Paper server with cross-play support for Bedrock Edition players.
 
 ## Setup
 
-### 0. Fork and Customize
+### 1. Fork and Customize
 
 **Important**: Before deploying, fork this repository and update the following personal information in `docker-compose.yml`:
 
@@ -29,12 +29,12 @@ Paper server with cross-play support for Bedrock Edition players.
 
 Also update the GitHub repository URL in `init-auto-update.sh` and `update-geyser.sh` if you're using the auto-update system.
 
-### 1. Create Directory
+### 2. Create Directory
 ```bash
 sudo mkdir -p /minecraft && sudo chmod 755 /minecraft
 ```
 
-### 2. Start Server
+### 3. Start Server
 ```bash
 docker-compose up -d
 ```
