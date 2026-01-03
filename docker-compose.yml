@@ -23,7 +23,7 @@ services:
       OVERRIDE_SERVER_PROPERTIES: "true"
       OPS: "Kleptonite32"
       # Performance optimizations
-      NETWORK_COMPRESSION_THRESHOLD: "128"
+      NETWORK_COMPRESSION_THRESHOLD: "4096"
       SNOOPER_ENABLED: "false"
       GEYSER_BEDROCK_COMPRESSION_LEVEL: "3"
       VIEW_DISTANCE: "28"
@@ -40,7 +40,8 @@ services:
         https://download.geysermc.org/v2/projects/hurricane/versions/latest/builds/latest/downloads/spigot
         # Temporarily disabled to test if ViaVersion is causing packet issues
         # https://hangarcdn.papermc.io/plugins/ViaVersion/ViaVersion/versions/5.7.0/PAPER/ViaVersion-5.7.0.jar
-        https://hangarcdn.papermc.io/plugins/pop4959/Chunky/versions/1.4.40/PAPER/Chunky-Bukkit-1.4.40.jar
+        # Temporarily disabled to test if Chunky is causing packet issues
+        # https://hangarcdn.papermc.io/plugins/pop4959/Chunky/versions/1.4.40/PAPER/Chunky-Bukkit-1.4.40.jar
     volumes:
       - "/minecraft:/data"
     entrypoint: /bin/bash
