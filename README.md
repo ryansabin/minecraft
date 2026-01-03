@@ -53,40 +53,6 @@ The auto-update system is automatically configured when the container starts. No
 - **Java Edition**: `your-server-ip:25565`
 - **Bedrock Edition**: `your-server-ip:19132`
 
-## Configuration
-
-This server is optimized for best gameplay performance with minimal CPU overhead. Key settings in `docker-compose.yml`:
-
-### Basic Settings
-- `MEMORY: "4G"` - RAM allocation
-- `VERSION: "1.21.11"` - Minecraft version
-- `USE_AIKAR_FLAGS: "true"` - Performance-optimized JVM flags
-
-### Distant Horizons Support
-- `VIEW_DISTANCE: "32"` - Extended render distance for Distant Horizons client mod
-- **Chunky plugin** - Pre-generates chunks for faster LOD loading
-- Players need to install Distant Horizons mod on their client: https://modrinth.com/mod/distanthorizons
-
-### Performance Optimizations
-- `NETWORK_COMPRESSION_THRESHOLD: "-1"` - Compression disabled (no CPU overhead, uses more bandwidth)
-- `GEYSER_BEDROCK_COMPRESSION_LEVEL: "3"` - Low compression for Bedrock (less CPU, more bandwidth)
-- `SIMULATION_DISTANCE: "6"` - Reduced from default 10 (major CPU reduction for entities/mobs)
-- `SYNC_CHUNK_WRITES: "false"` - Async chunk writing (reduces I/O lag spikes)
-- `MAX_TICK_TIME: "120000"` - Prevents watchdog crashes during lag spikes
-- `SPAWN_PROTECTION: "0"` - Disables spawn protection checks (minor CPU savings)
-- `ENABLE_ROLLING_LOGS: "false"` - Reduces log I/O overhead
-- `SNOOPER_ENABLED: "false"` - Disables telemetry (better performance and privacy)
-
-### Geyser Configuration (config.yml)
-The optimized Geyser config includes:
-- **Timeouts increased to 120s** - Better stability for console players
-- **Skin caching enabled (7 days)** - Reduces network calls
-- **Compression level: 3** - Low CPU overhead
-- **MTU: 1492** - Maximum MTU for less packet fragmentation
-- **Java compression disabled** - No Java→Geyser compression overhead
-
-Full config reference: https://github.com/itzg/docker-minecraft-server
-
 ## Commands
 
 ```bash
