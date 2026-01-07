@@ -31,7 +31,7 @@ else
         echo "[$(date)] Config file doesn't exist, creating..."
         cp "$TEMP_CONFIG" "$CONFIG_PATH"
         NEEDS_RESTART=true
-    elif ! cmp -s "$TEMP_CONFIG" "$CONFIG_PATH"; then
+    elif ! diff -q "$TEMP_CONFIG" "$CONFIG_PATH" > /dev/null 2>&1; then
         echo "[$(date)] Config.yml has changed, updating..."
         cp "$CONFIG_PATH" "$CONFIG_PATH.backup.$(date +%Y%m%d-%H%M%S)"
         cp "$TEMP_CONFIG" "$CONFIG_PATH"
