@@ -236,7 +236,7 @@ advanced:
     validate-bedrock-login: true
 
 # If debug messages should be sent through console
-debug-mode: false
+debug-mode: true
 
 # Do not change!
 config-version: 5
