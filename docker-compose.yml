@@ -35,7 +35,9 @@ services:
       # Allow Bedrock players to chat (disable secure profile enforcement)
       ENFORCE_SECURE_PROFILE: "false"
       # Network stability settings to prevent connection resets
-      JVM_DD_OPTS: "paper.playerconnection.keepalive=120"
+      # Increased keepalive for PlayStation stability (300 seconds = 5 minutes)
+      # This prevents disconnects when client doesn't respond to keepalive packets quickly
+      JVM_DD_OPTS: "-Dpaper.playerconnection.keepalive=300"
       PLUGINS: |-
         https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot
         https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot
