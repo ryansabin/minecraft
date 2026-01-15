@@ -34,6 +34,8 @@ services:
       ENABLE_ROLLING_LOGS: "false"
       # Allow Bedrock players to chat (disable secure profile enforcement)
       ENFORCE_SECURE_PROFILE: "false"
+      # Allow flight to prevent Bedrock players from being kicked for floating
+      ALLOW_FLIGHT: "true"
       # Network stability settings to prevent connection resets
       # Increased keepalive for PlayStation stability (300 seconds = 5 minutes)
       # This prevents disconnects when client doesn't respond to keepalive packets quickly
