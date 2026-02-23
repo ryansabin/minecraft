@@ -4,6 +4,7 @@ services:
   minecraft:
     container_name: minecraft
     image: itzg/minecraft-server:latest
+    pull_policy: daily
     tty: true
     stdin_open: true
     ports:
@@ -22,7 +23,6 @@ services:
       LEVEL: "Season4"
       OVERRIDE_SERVER_PROPERTIES: "true"
       OPS: "Kleptonite32"
-      # Performance optimizations
       NETWORK_COMPRESSION_THRESHOLD: "-1"
       SNOOPER_ENABLED: "false"
       GEYSER_BEDROCK_COMPRESSION_LEVEL: "0"
@@ -32,21 +32,14 @@ services:
       MAX_TICK_TIME: "120000"
       SPAWN_PROTECTION: "0"
       ENABLE_ROLLING_LOGS: "false"
-      # Allow Bedrock players to chat (disable secure profile enforcement)
       ENFORCE_SECURE_PROFILE: "false"
-      # Allow flight to prevent Bedrock players from being kicked for floating
       ALLOW_FLIGHT: "true"
-      # Network stability settings to prevent connection resets
-      # Increased keepalive for PlayStation stability (300 seconds = 5 minutes)
-      # This prevents disconnects when client doesn't respond to keepalive packets quickly
       JVM_DD_OPTS: "-Dpaper.playerconnection.keepalive=300"
       PLUGINS: |-
         https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot
         https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot
         https://download.geysermc.org/v2/projects/hurricane/versions/latest/builds/latest/downloads/spigot
-        # Temporarily disabled to test if ViaVersion is causing packet issues
         https://hangarcdn.papermc.io/plugins/ViaVersion/ViaVersion/versions/5.7.0/PAPER/ViaVersion-5.7.0.jar
-        # https://hangarcdn.papermc.io/plugins/ViaVersion/ViaVersion/versions/5.7.2-SNAPSHOT%2B917/PAPER/ViaVersion-5.7.2-SNAPSHOT.jar
         # Temporarily disabled to test if Chunky is causing packet issues
         # https://hangarcdn.papermc.io/plugins/pop4959/Chunky/versions/1.4.40/PAPER/Chunky-Bukkit-1.4.40.jar
     volumes:
