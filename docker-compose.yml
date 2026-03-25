@@ -13,7 +13,7 @@ services:
     environment:
       EULA: "TRUE"
       TYPE: "PAPER"
-      VERSION: "26.1"
+      VERSION: "1.21.11"
       MEMORY: "4G"
       USE_AIKAR_FLAGS: "true"
       TZ: "America/Denver"
