@@ -4,4 +4,5 @@
 
 https://download.geysermc.org/v2/projects/emoteoffhand/versions/latest/builds/latest/downloads/emoteoffhand|EmoteOffhand.jar
 https://download.geysermc.org/v2/projects/thirdpartycosmetics/versions/latest/builds/latest/downloads/thirdpartycosmetics|ThirdPartyCosmetics.jar
-https://github.com/MCXboxBroadcast/Broadcaster/releases/download/134/MCXboxBroadcastExtension.jar|MCXboxBroadcastExtension.jar
+# https://github.com/MCXboxBroadcast/Broadcaster/releases/download/134/MCXboxBroadcastExtension.jar|MCXboxBroadcastExtension.jar
+https://github.com/MCXboxBroadcast/Broadcaster/releases/download/140/MCXboxBroadcastExtension.jar|MCXboxBroadcastExtension.jar
